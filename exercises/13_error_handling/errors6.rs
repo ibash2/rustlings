@@ -4,7 +4,7 @@
 // a custom error type to make it possible for callers to decide what to do next
 // when our function returns an error.
 
-use std::num::ParseIntError;
+use std::{num::ParseIntError};
 
 #[derive(PartialEq, Debug)]
 enum CreationError {
@@ -25,7 +25,9 @@ impl ParsePosNonzeroError {
     }
 
     // TODO: Add another error conversion function here.
-    // fn from_parse_int(???) -> Self { ??? }
+    fn from_parse_int(err: ParseIntError) -> Self {
+        Self::ParseInt(err)
+    }
 }
 
 #[derive(PartialEq, Debug)]
@@ -43,12 +45,36 @@ impl PositiveNonzeroInteger {
     fn parse(s: &str) -> Result<Self, ParsePosNonzeroError> {
         // TODO: change this to return an appropriate error instead of panicking
         // when `parse()` returns an error.
-        let x: i64 = s.parse().unwrap();
+        let x = s.parse().map_err(ParsePosNonzeroError::from_parse_int)?;
         Self::new(x).map_err(ParsePosNonzeroError::from_creation)
     }
 }
 
-fn main() {
+use std::error::Error;
+
+// impl Error for CreationError {}
+
+fn main() -> Result<(), Box<dyn Error>>  {
+    // let x = "1_2";
+    // let r = x.parse::<i64>().map_err(ParsePosNonzeroError::from_parse_int)?;
+
+    // print!("{:?}", r);
+
+    fn stringify(x: u32) -> String { format!("error code: {x}") }
+
+    let x: Result<u32, u32> = Ok(2);
+    assert_eq!(x.map_err(stringify)?, 2);
+
+    let x: Result<u32, u32> = Err(13);
+    print!("{:?}", x.map_err(stringify)?);
+    // assert_eq!(, "error code: 13".to_string());
+
+    Ok(())
+    // match r {
+    //     Ok(s) => println!("{}", s),
+    //     Err(s) => println!("{}", s),
+    // }
+
     // You can optionally experiment here.
 }
 
