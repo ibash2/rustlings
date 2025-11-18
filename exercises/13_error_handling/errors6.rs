@@ -60,15 +60,6 @@ fn main() -> Result<(), Box<dyn Error>>  {
 
     // print!("{:?}", r);
 
-    fn stringify(x: u32) -> String { format!("error code: {x}") }
-
-    let x: Result<u32, u32> = Ok(2);
-    assert_eq!(x.map_err(stringify)?, 2);
-
-    let x: Result<u32, u32> = Err(13);
-    print!("{:?}", x.map_err(stringify)?);
-    // assert_eq!(, "error code: 13".to_string());
-
     Ok(())
     // match r {
     //     Ok(s) => println!("{}", s),
