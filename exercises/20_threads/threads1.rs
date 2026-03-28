@@ -4,8 +4,7 @@
 // return values into a vector.
 
 use std::{
-    thread,
-    time::{Duration, Instant},
+     thread, time::{Duration, Instant}
 };
 
 fn main() {
@@ -22,6 +21,8 @@ fn main() {
 
     let mut results = Vec::new();
     for handle in handles {
+        let result = handle.join();
+        if let Result::Ok(val) = result {results.push(val);}
         // TODO: Collect the results of all threads into the `results` vector.
         // Use the `JoinHandle` struct which is returned by `thread::spawn`.
     }
